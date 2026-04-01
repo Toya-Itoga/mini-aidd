@@ -61,7 +61,7 @@
         // 編集ダイアログを開く（DBからデータを取得してフォームに入力）
         async openEditDialog(lot_id) {
           this.errorMsg = '';
-          const res = await fetch(`/api/lots/${lot_id}`);
+          const res = await fetch(`/lots/${lot_id}`);
           const lot = await res.json();
           this.form = { lot_id: lot.lot_id, farm_name: lot.farm_name, house_name: lot.house_name, plant_count: lot.plant_count };
           this.dialogMode = 'edit';
@@ -76,7 +76,7 @@
         async submitForm() {
           this.errorMsg = '';
           const isCreate = this.dialogMode === 'create';
-          const url = isCreate ? '/api/lots' : `/api/lots/${this.form.lot_id}`;
+          const url = isCreate ? '/lots' : `/lots/${this.form.lot_id}`;
           const method = isCreate ? 'POST' : 'PATCH';
           const { farm_name, house_name, plant_count } = this.form;
           const body = isCreate ? this.form : { farm_name, house_name, plant_count };

@@ -5,7 +5,7 @@ from src.database import get_db
 from src.schemas import UserCreate, UserUpdate, UserResponse
 from src.services import user_service
 
-router = APIRouter(prefix="/api/users", tags=["users"])
+router = APIRouter(prefix="/users", tags=["users"])
 templates = Jinja2Templates(directory="src/templates")
 
 

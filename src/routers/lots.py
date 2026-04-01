@@ -5,7 +5,7 @@ from src.database import get_db
 from src.schemas import LotCreate, LotUpdate, LotResponse
 from src.services import lot_service
 
-router = APIRouter(prefix="/api/lots", tags=["lots"])
+router = APIRouter(prefix="/lots", tags=["lots"])
 templates = Jinja2Templates(directory="src/templates")
 
 

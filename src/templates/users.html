@@ -60,7 +60,7 @@
         // 編集ダイアログを開く（DBからデータを取得してフォームに入力）
         async openEditDialog(username) {
           this.errorMsg = '';
-          const res = await fetch(`/api/users/${username}`);
+          const res = await fetch(`/users/${username}`);
           const user = await res.json();
           this.form = { username: user.username, full_name: user.full_name, role: user.role };
           this.dialogMode = 'edit';
@@ -75,7 +75,7 @@
         async submitForm() {
           this.errorMsg = '';
           const isCreate = this.dialogMode === 'create';
-          const url = isCreate ? '/api/users' : `/api/users/${this.form.username}`;
+          const url = isCreate ? '/users' : `/users/${this.form.username}`;
           const method = isCreate ? 'POST' : 'PATCH';
           const { full_name, role } = this.form;
           const body = isCreate ? this.form : { full_name, role };

@@ -29,7 +29,7 @@ function lotApp(initialLots) {
     // ロットを登録する
     async submitForm() {
       this.errorMsg = '';
-      const res = await fetch('/api/lots', {
+      const res = await fetch('/lots', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(this.form),
