@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>農場日報管理アプリ</title>
+  <link rel="stylesheet" href="/static/css/style.css">
+  <!-- Alpine.js -->
+  <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
+</head>
+<body>
+  <div class="container" x-data="lotApp({{ lots | tojson }})">
+
+    <!-- ヘッダー -->
+    <div class="header">
+      <h1>🌱 農場日報管理アプリ</h1>
+      <div style="display:flex; gap:10px;">
+        <a href="/api/lots" class="btn btn-secondary">ロット管理</a>
+        <a href="/api/users" class="btn btn-secondary">ユーザ管理</a>
+        <!-- <button class="btn btn-primary" @click="openDialog()">＋ 新規登録</button> -->
+      </div>
+    </div>
+
+    <!-- ロットカード一覧 -->
+    <div class="lot-grid" x-show="lots.length > 0">
+      <template x-for="lot in lots" :key="lot.id">
+        <div class="lot-card">
+          <div class="lot-id" x-text="'ロットID: ' + lot.lot_id"></div>
+          <div class="farm-name" x-text="lot.farm_name"></div>
+          <div class="detail" x-text="'ハウス: ' + lot.house_name"></div>
+          <div class="detail" x-text="'栽培本数: ' + lot.plant_count + ' 本'"></div>
+        </div>
+      </template>
+    </div>
+
+    <!-- 空状態 -->
+    <div class="empty-state" x-show="lots.length === 0">
+      ロットが登録されていません
+    </div>
+
+    {% include 'component/lot_dialog.html' %}
+
+  </div>
+
+  <script src="/static/js/app.js"></script>
+</body>
+</html>

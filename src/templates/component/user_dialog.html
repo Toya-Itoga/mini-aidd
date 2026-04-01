@@ -1,0 +1,31 @@
+<!-- ユーザダイアログ（新規登録 / 編集 共通） -->
+<div class="overlay" x-show="dialogOpen" x-cloak @click.self="closeDialog()">
+  <div class="dialog" @click.stop>
+    <h2 x-text="dialogMode === 'create' ? 'ユーザ登録' : 'ユーザ編集'"></h2>
+    <form @submit.prevent="submitForm()">
+
+      <div class="form-group">
+        <label>ユーザ名</label>
+        <input type="text" x-model="form.username"
+               :disabled="dialogMode === 'edit'"
+               :style="dialogMode === 'edit' ? 'background:#f0f0f0; color:#888;' : ''"
+               placeholder="yamada_taro" required>
+      </div>
+      <div class="form-group">
+        <label>氏名</label>
+        <input type="text" x-model="form.full_name" placeholder="山田 太郎" required>
+      </div>
+      <div class="form-group">
+        <label>役割</label>
+        <input type="text" x-model="form.role" placeholder="管理者 / 作業員" required>
+      </div>
+
+      <div class="error-msg" x-text="errorMsg"></div>
+      <div class="form-actions">
+        <button type="button" class="btn btn-secondary" @click="closeDialog()">キャンセル</button>
+        <button type="submit" class="btn btn-primary"
+                x-text="dialogMode === 'create' ? '登録' : '保存'"></button>
+      </div>
+    </form>
+  </div>
+</div>

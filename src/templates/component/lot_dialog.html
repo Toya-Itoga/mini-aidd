@@ -1,0 +1,35 @@
+<!-- ロットダイアログ（新規登録 / 編集 共通） -->
+<div class="overlay" x-show="dialogOpen" x-cloak @click.self="closeDialog()">
+  <div class="dialog" @click.stop>
+    <h2 x-text="dialogMode === 'create' ? 'ロット登録' : 'ロット編集'"></h2>
+    <form @submit.prevent="submitForm()">
+
+      <div class="form-group">
+        <label>ロットID</label>
+        <input type="text" x-model="form.lot_id"
+               :disabled="dialogMode === 'edit'"
+               :style="dialogMode === 'edit' ? 'background:#f0f0f0; color:#888;' : ''"
+               placeholder="LOT-001" required>
+      </div>
+      <div class="form-group">
+        <label>農場名</label>
+        <input type="text" x-model="form.farm_name" placeholder="第一農場" required>
+      </div>
+      <div class="form-group">
+        <label>ハウス名</label>
+        <input type="text" x-model="form.house_name" placeholder="A棟" required>
+      </div>
+      <div class="form-group">
+        <label>栽培本数</label>
+        <input type="number" x-model.number="form.plant_count" placeholder="500" min="1" required>
+      </div>
+
+      <div class="error-msg" x-text="errorMsg"></div>
+      <div class="form-actions">
+        <button type="button" class="btn btn-secondary" @click="closeDialog()">キャンセル</button>
+        <button type="submit" class="btn btn-primary"
+                x-text="dialogMode === 'create' ? '登録' : '保存'"></button>
+      </div>
+    </form>
+  </div>
+</div>

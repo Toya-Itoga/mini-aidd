@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ユーザ管理 - 農場日報管理アプリ</title>
+  <link rel="stylesheet" href="/static/css/style.css">
+  <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
+</head>
+<body>
+  <div class="container" x-data="userDialog()">
+
+    <div class="header">
+      <h1>👤 ユーザ管理</h1>
+      <div style="display:flex; gap:10px;">
+        <button class="btn btn-primary" @click="openDialog()">＋ 新規登録</button>
+        <a href="/" class="btn btn-secondary">トップへ戻る</a>
+      </div>
+    </div>
+
+    {% if users %}
+    <div class="lot-grid">
+      {% for user in users %}
+      <div class="lot-card">
+        <div class="lot-id">{{ user.username }}</div>
+        <div class="farm-name">{{ user.full_name }}</div>
+        <div class="detail">役割: {{ user.role }}</div>
+        <div style="margin-top:10px;">
+          <button class="btn btn-secondary" @click="openEditDialog('{{ user.username }}')">編集</button>
+        </div>
+      </div>
+      {% endfor %}
+    </div>
+    {% else %}
+    <div class="empty-state">ユーザが登録されていません</div>
+    {% endif %}
+
+    {% include 'component/user_dialog.html' %}
+
+  </div>
+
+  <script>
+    function userDialog() {
+      return {
+        dialogOpen: false,
+        dialogMode: 'create',  // 'create' | 'edit'
+        errorMsg: '',
+        form: { username: '', full_name: '', role: '' },
+
+        // 新規登録ダイアログを開く（フォームを空欄で表示）
+        openDialog() {
+          this.dialogMode = 'create';
+          this.errorMsg = '';
+          this.form = { username: '', full_name: '', role: '' };
+          this.dialogOpen = true;
+        },
+
+        // 編集ダイアログを開く（DBからデータを取得してフォームに入力）
+        async openEditDialog(username) {
+          this.errorMsg = '';
+          const res = await fetch(`/api/users/${username}`);
+          const user = await res.json();
+          this.form = { username: user.username, full_name: user.full_name, role: user.role };
+          this.dialogMode = 'edit';
+          this.dialogOpen = true;
+        },
+
+        closeDialog() {
+          this.dialogOpen = false;
+        },
+
+        // モードに応じてPOST / PATCHを切り替える
+        async submitForm() {
+          this.errorMsg = '';
+          const isCreate = this.dialogMode === 'create';
+          const url = isCreate ? '/api/users' : `/api/users/${this.form.username}`;
+          const method = isCreate ? 'POST' : 'PATCH';
+          const { full_name, role } = this.form;
+          const body = isCreate ? this.form : { full_name, role };
+
+          const res = await fetch(url, {
+            method,
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(body),
+          });
+
+          if (res.ok) {
+            window.location.reload();
+          } else {
+            const err = await res.json();
+            this.errorMsg = err.detail || (isCreate ? '登録に失敗しました' : '更新に失敗しました');
+          }
+        },
+      };
+    }
+  </script>
+</body>
+</html>
