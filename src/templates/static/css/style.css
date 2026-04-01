@@ -168,3 +168,49 @@ body {
   margin-top: 12px;
   min-height: 20px;
 }
+
+/* ==========================
+   ダークモード
+========================== */
+body.dark {
+  background: #1a1a2e;
+  color: #e0e0e0;
+}
+
+body.dark .header h1 { color: #52b788; }
+
+body.dark .lot-card {
+  background: #2a2a3e;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.3);
+}
+
+body.dark .lot-card .lot-id { color: #aaa; }
+body.dark .lot-card .detail { color: #bbb; }
+
+body.dark .dialog {
+  background: #2a2a3e;
+  color: #e0e0e0;
+}
+
+body.dark .dialog h2 { color: #52b788; }
+
+body.dark .form-group label { color: #bbb; }
+
+body.dark .form-group input {
+  background: #1a1a2e;
+  color: #e0e0e0;
+  border-color: #555;
+}
+
+body.dark .form-group input:disabled {
+  background: #333;
+  color: #777;
+}
+
+body.dark .empty-state { color: #666; }
+
+body.dark .btn-secondary {
+  background: #495057;
+}
+
+body.dark .btn-secondary:hover { background: #343a40; }

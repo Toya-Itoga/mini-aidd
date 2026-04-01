@@ -5,6 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>ユーザ管理 - 農場日報管理アプリ</title>
   <link rel="stylesheet" href="/static/css/style.css">
+  <script src="/static/js/theme.js"></script>
   <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
 </head>
 <body>
@@ -15,6 +16,7 @@
       <div style="display:flex; gap:10px;">
         <button class="btn btn-primary" @click="openDialog()">＋ 新規登録</button>
         <a href="/" class="btn btn-secondary">トップへ戻る</a>
+        <button id="themeToggle" class="btn btn-secondary" onclick="toggleTheme()">ダークモード</button>
       </div>
     </div>
 
