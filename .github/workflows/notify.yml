@@ -16,5 +16,5 @@ jobs:
           password: ${{ secrets.EMAIL_PASSWORD }}
           subject: "Push通知"
           body: "GitHubにpushされました"
-          to: your@email.com
-          from: your@email.com
+          to: ${{ secrets.EMAIL }}
+          from: ${{ secrets.EMAIL }}
