@@ -1,4 +1,5 @@
 from fastapi import APIRouter, Depends, Request, status
+from fastapi.responses import RedirectResponse
 from fastapi.templating import Jinja2Templates
 from sqlalchemy.orm import Session
 from src.database import get_db
@@ -15,9 +16,11 @@ templates = Jinja2Templates(directory="src/templates")
 
 @router.get("")
 def list_users(request: Request, db: Session = Depends(get_db)):
-    """全ユーザ一覧をHTML描画する"""
+    """ユーザ一覧を返す。HTMXリクエストの場合はパーシャルHTML、直接アクセスはトップへリダイレクト"""
     users = [UserResponse.model_validate(u).model_dump(mode="json") for u in user_service.get_users(db)]
-    return templates.TemplateResponse(request, "users.html", {"users": users})
+    if request.headers.get("HX-Request"):
+        return templates.TemplateResponse(request, "users.html", {"users": users})
+    return RedirectResponse(url="/", status_code=302)
 
 
 @router.post("", response_model=UserResponse, status_code=status.HTTP_201_CREATED)

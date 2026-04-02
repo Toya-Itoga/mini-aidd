@@ -1,15 +1,12 @@
 import os
 from dotenv import load_dotenv
-from fastapi import FastAPI, Request, Depends
+from fastapi import FastAPI, Request
 from fastapi.staticfiles import StaticFiles
 from fastapi.templating import Jinja2Templates
-from sqlalchemy.orm import Session
 
-from src.database import engine, get_db
+from src.database import engine
 from src import models
 from src.routers import lots, users
-from src.services import lot_service
-from src.schemas import LotResponse
 
 load_dotenv()
 
@@ -39,11 +36,9 @@ app.include_router(users.router)
 # ==========================
 
 @app.get("/")
-def index(request: Request, db: Session = Depends(get_db)):
-    """ロット一覧画面"""
-    # SQLAlchemy オブジェクトを tojson で扱えるよう dict に変換する
-    lots_list = [LotResponse.model_validate(lot).model_dump(mode="json") for lot in lot_service.get_lots(db)]
-    return templates.TemplateResponse(request, "index.html", {"lots": lots_list})
+def index(request: Request):
+    """メイン画面（コンテンツはHTMX経由でロード）"""
+    return templates.TemplateResponse(request, "index.html", {})
 
 
 # ==========================

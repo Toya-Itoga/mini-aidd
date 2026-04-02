@@ -13,6 +13,125 @@ body {
   min-height: 100vh;
 }
 
+/* ==========================
+   アプリ全体レイアウト（サイドバー構成）
+========================== */
+.app-layout {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+/* ヘッダー */
+.app-header {
+  background: #5a5a5a;
+  color: white;
+  padding: 20px 32px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-shrink: 0;
+}
+
+.app-header h1 {
+  font-size: 22px;
+  font-weight: bold;
+  letter-spacing: 0.02em;
+}
+
+/* ヘッダー + サイドバー下のボディ */
+.app-body {
+  display: flex;
+  flex: 1;
+}
+
+/* ==========================
+   サイドバー
+========================== */
+.sidebar {
+  width: 200px;
+  background: #7a7a7a;
+  display: flex;
+  flex-direction: column;
+  flex-shrink: 0;
+}
+
+.sidebar-item {
+  display: block;
+  width: 100%;
+  padding: 18px 20px;
+  color: white;
+  text-align: center;
+  cursor: pointer;
+  border: none;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.15);
+  background: transparent;
+  font-size: 15px;
+  font-weight: 500;
+  transition: background 0.15s;
+}
+
+.sidebar-item:hover {
+  background: rgba(0, 0, 0, 0.15);
+}
+
+.sidebar-item--active {
+  background: rgba(0, 0, 0, 0.25);
+}
+
+/* サイドバーラベル（デザインのwireframe表記） */
+.sidebar-label {
+  color: rgba(255, 255, 255, 0.4);
+  font-size: 13px;
+  text-align: center;
+  margin-top: auto;
+  padding: 20px;
+}
+
+/* ==========================
+   コンテンツエリア
+========================== */
+.content-area {
+  flex: 1;
+  padding: 32px;
+  background: white;
+  overflow-y: auto;
+}
+
+/* コンテンツヘッダー（タイトル + アクションボタン） */
+.content-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 28px;
+}
+
+.content-title {
+  font-size: 20px;
+  font-weight: bold;
+  color: #2d6a4f;
+}
+
+/* ==========================
+   テーマ切替ボタン
+========================== */
+.btn-theme {
+  background: rgba(255, 255, 255, 0.15);
+  color: white;
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  padding: 8px 16px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 13px;
+  font-weight: bold;
+  transition: background 0.15s;
+}
+
+.btn-theme:hover {
+  background: rgba(255, 255, 255, 0.25);
+}
+
+/* 旧レイアウト（後方互換） */
 .container {
   max-width: 900px;
   margin: 0 auto;
@@ -20,7 +139,7 @@ body {
 }
 
 /* ==========================
-   ヘッダー
+   ヘッダー（旧）
 ========================== */
 .header {
   display: flex;
@@ -176,6 +295,28 @@ body.dark {
   background: #1a1a2e;
   color: #e0e0e0;
 }
+
+body.dark .app-header {
+  background: #2c2c3e;
+}
+
+body.dark .sidebar {
+  background: #3a3a4e;
+}
+
+body.dark .sidebar-item:hover {
+  background: rgba(255, 255, 255, 0.08);
+}
+
+body.dark .sidebar-item--active {
+  background: rgba(255, 255, 255, 0.12);
+}
+
+body.dark .content-area {
+  background: #1a1a2e;
+}
+
+body.dark .content-title { color: #52b788; }
 
 body.dark .header h1 { color: #52b788; }
 

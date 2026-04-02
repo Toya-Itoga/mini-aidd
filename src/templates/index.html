@@ -6,42 +6,56 @@
   <title>農場日報管理アプリ</title>
   <link rel="stylesheet" href="/static/css/style.css">
   <script src="/static/js/theme.js"></script>
+  <!-- HTMX -->
+  <script src="https://unpkg.com/htmx.org@1.9.12/dist/htmx.min.js"></script>
   <!-- Alpine.js -->
   <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
 </head>
 <body>
-  <div class="container" x-data="lotApp({{ lots | tojson }})">
+  <div class="app-layout" x-data="{ activeMenu: 'lots' }">
 
     <!-- ヘッダー -->
-    <div class="header">
-      <h1>🌱 農場日報管理アプリ</h1>
-      <div style="display:flex; gap:10px;">
-        <a href="/lots" class="btn btn-secondary">ロット管理</a>
-        <a href="/users" class="btn btn-secondary">ユーザ管理</a>
-        <button id="themeToggle" class="btn btn-secondary" onclick="toggleTheme()">ダークモード</button>
-        <!-- <button class="btn btn-primary" @click="openDialog()">＋ 新規登録</button> -->
-      </div>
+    <header class="app-header">
+      <h1>🌱農場日報管理アプリ</h1>
+      <button id="themeToggle" class="btn btn-theme" onclick="toggleTheme()">ダークモード</button>
+    </header>
+
+    <div class="app-body">
+
+      <!-- サイドバー -->
+      <nav class="sidebar">
+        <button
+          class="sidebar-item"
+          :class="{ 'sidebar-item--active': activeMenu === 'lots' }"
+          @click="activeMenu = 'lots'"
+          hx-get="/lots"
+          hx-target="#content"
+          hx-swap="innerHTML"
+          hx-push-url="false">
+          ロット管理
+        </button>
+        <button
+          class="sidebar-item"
+          :class="{ 'sidebar-item--active': activeMenu === 'users' }"
+          @click="activeMenu = 'users'"
+          hx-get="/users"
+          hx-target="#content"
+          hx-swap="innerHTML"
+          hx-push-url="false">
+          ユーザ管理
+        </button>
+        <!-- <div class="sidebar-label">サイドバー</div> -->
+      </nav>
+
+      <!-- コンテンツエリア（初期表示: ロット管理） -->
+      <main
+        id="content"
+        class="content-area"
+        hx-get="/lots"
+        hx-trigger="load">
+      </main>
+
     </div>
-
-    <!-- ロットカード一覧 -->
-    <div class="lot-grid" x-show="lots.length > 0">
-      <template x-for="lot in lots" :key="lot.id">
-        <div class="lot-card">
-          <div class="lot-id" x-text="'ロットID: ' + lot.lot_id"></div>
-          <div class="farm-name" x-text="lot.farm_name"></div>
-          <div class="detail" x-text="'ハウス: ' + lot.house_name"></div>
-          <div class="detail" x-text="'栽培本数: ' + lot.plant_count + ' 本'"></div>
-        </div>
-      </template>
-    </div>
-
-    <!-- 空状態 -->
-    <div class="empty-state" x-show="lots.length === 0">
-      ロットが登録されていません
-    </div>
-
-    {% include 'component/lot_dialog.html' %}
-
   </div>
 
   <script src="/static/js/app.js"></script>

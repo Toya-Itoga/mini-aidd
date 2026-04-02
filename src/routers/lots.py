@@ -1,4 +1,5 @@
 from fastapi import APIRouter, Depends, Request, status
+from fastapi.responses import RedirectResponse
 from fastapi.templating import Jinja2Templates
 from sqlalchemy.orm import Session
 from src.database import get_db
@@ -15,9 +16,11 @@ templates = Jinja2Templates(directory="src/templates")
 
 @router.get("")
 def list_lots(request: Request, db: Session = Depends(get_db)):
-    """全ロット一覧をHTML描画する"""
+    """ロット一覧を返す。HTMXリクエストの場合はパーシャルHTML、直接アクセスはトップへリダイレクト"""
     lots = [LotResponse.model_validate(l).model_dump(mode="json") for l in lot_service.get_lots(db)]
-    return templates.TemplateResponse(request, "lots.html", {"lots": lots})
+    if request.headers.get("HX-Request"):
+        return templates.TemplateResponse(request, "lots.html", {"lots": lots})
+    return RedirectResponse(url="/", status_code=302)
 
 
 @router.post("", response_model=LotResponse, status_code=status.HTTP_201_CREATED)

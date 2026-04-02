@@ -1,101 +1,32 @@
-<!DOCTYPE html>
-<html lang="ja">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>ロット一覧 - 農場日報管理アプリ</title>
-  <link rel="stylesheet" href="/static/css/style.css">
-  <script src="/static/js/theme.js"></script>
-  <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
-</head>
-<body>
-  <div class="container" x-data="lotDialog()">
+<!-- ロット管理 パーシャル（HTMX経由でコンテンツエリアに挿入） -->
+<div x-data="lotDialog()">
 
-    <div class="header">
-      <h1>🌱 ロット一覧</h1>
-      <div style="display:flex; gap:10px;">
-        <button class="btn btn-primary" @click="openDialog()">＋ 新規登録</button>
-        <a href="/" class="btn btn-secondary">トップへ戻る</a>
-        <button id="themeToggle" class="btn btn-secondary" onclick="toggleTheme()">ダークモード</button>
-      </div>
-    </div>
-
-    {% if lots %}
-    <div class="lot-grid">
-      {% for lot in lots %}
-      <div class="lot-card">
-        <div class="lot-id">ロットID: {{ lot.lot_id }}</div>
-        <div class="farm-name">{{ lot.farm_name }}</div>
-        <div class="detail">ハウス: {{ lot.house_name }}</div>
-        <div class="detail">栽培本数: {{ lot.plant_count }} 本</div>
-        <div style="margin-top:10px;">
-          <button class="btn btn-secondary" @click="openEditDialog('{{ lot.lot_id }}')">編集</button>
-        </div>
-      </div>
-      {% endfor %}
-    </div>
-    {% else %}
-    <div class="empty-state">ロットが登録されていません</div>
-    {% endif %}
-
-    {% include 'component/lot_dialog.html' %}
-
+  <!-- コンテンツヘッダー -->
+  <div class="content-header">
+    <h2 class="content-title">ロット一覧</h2>
+    <button class="btn btn-primary" @click="openDialog()">＋ 新規登録</button>
   </div>
 
-  <script>
-    function lotDialog() {
-      return {
-        dialogOpen: false,
-        dialogMode: 'create',  // 'create' | 'edit'
-        errorMsg: '',
-        form: { lot_id: '', farm_name: '', house_name: '', plant_count: '' },
+  <!-- ロットカード一覧 -->
+  {% if lots %}
+  <div class="lot-grid">
+    {% for lot in lots %}
+    <div class="lot-card">
+      <div class="lot-id">ロットID: {{ lot.lot_id }}</div>
+      <div class="farm-name">{{ lot.farm_name }}</div>
+      <div class="detail">ハウス: {{ lot.house_name }}</div>
+      <div class="detail">栽培本数: {{ lot.plant_count }} 本</div>
+      <div style="margin-top:10px;">
+        <button class="btn btn-secondary" @click="openEditDialog('{{ lot.lot_id }}')">編集</button>
+      </div>
+    </div>
+    {% endfor %}
+  </div>
+  {% else %}
+  <div class="empty-state">ロットが登録されていません</div>
+  {% endif %}
 
-        // 新規登録ダイアログを開く（フォームを空欄で表示）
-        openDialog() {
-          this.dialogMode = 'create';
-          this.errorMsg = '';
-          this.form = { lot_id: '', farm_name: '', house_name: '', plant_count: '' };
-          this.dialogOpen = true;
-        },
+  <!-- ロット登録 / 編集ダイアログ -->
+  {% include 'component/lot_dialog.html' %}
 
-        // 編集ダイアログを開く（DBからデータを取得してフォームに入力）
-        async openEditDialog(lot_id) {
-          this.errorMsg = '';
-          const res = await fetch(`/lots/${lot_id}`);
-          const lot = await res.json();
-          this.form = { lot_id: lot.lot_id, farm_name: lot.farm_name, house_name: lot.house_name, plant_count: lot.plant_count };
-          this.dialogMode = 'edit';
-          this.dialogOpen = true;
-        },
-
-        closeDialog() {
-          this.dialogOpen = false;
-        },
-
-        // モードに応じてPOST / PATCHを切り替える
-        async submitForm() {
-          this.errorMsg = '';
-          const isCreate = this.dialogMode === 'create';
-          const url = isCreate ? '/lots' : `/lots/${this.form.lot_id}`;
-          const method = isCreate ? 'POST' : 'PATCH';
-          const { farm_name, house_name, plant_count } = this.form;
-          const body = isCreate ? this.form : { farm_name, house_name, plant_count };
-
-          const res = await fetch(url, {
-            method,
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify(body),
-          });
-
-          if (res.ok) {
-            window.location.reload();
-          } else {
-            const err = await res.json();
-            this.errorMsg = err.detail || (isCreate ? '登録に失敗しました' : '更新に失敗しました');
-          }
-        },
-      };
-    }
-  </script>
-</body>
-</html>
+</div>
