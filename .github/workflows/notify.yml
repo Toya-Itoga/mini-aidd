@@ -3,8 +3,33 @@ name: Notify
 on: push
 
 jobs:
+  # ==========================
+  # テスト実行ジョブ
+  # ==========================
+  test:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Install dependencies
+        run: pip install -r requirements.txt pytest httpx
+
+      - name: Run tests
+        run: pytest tests/ -v
+
+  # ==========================
+  # メール通知ジョブ（テスト通過時のみ実行）
+  # ==========================
   notify:
     runs-on: ubuntu-latest
+    needs: test  # test ジョブが成功した場合のみ実行される
 
     steps:
       - name: Send Email
@@ -15,6 +40,6 @@ jobs:
           username: ${{ secrets.EMAIL }}
           password: ${{ secrets.EMAIL_PASSWORD }}
           subject: "Push通知"
-          body: "GitHubにpushされました"
+          body: "GitHubにpushされました（テスト通過）"
           to: ${{ secrets.EMAIL }}
           from: ${{ secrets.EMAIL }}
