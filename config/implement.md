@@ -4,7 +4,7 @@
 - src/
 
 # タスク
-- GitHubへのプッシュ時にtestを実行しtestが通った時のみプッシュするようnotify.ymlを修正して
+- tests/にtest_users_api.pyを追加しユーザ関連のテストも行うようにして
 
 # ルール
 - 変更は必ずdiff形式で出力
