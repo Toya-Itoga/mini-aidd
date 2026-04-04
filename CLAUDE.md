@@ -1,4 +1,4 @@
-# CLAUDE.md — このリポジトリ向け Claude Code 設定
+# Claude Code設定
 
 ## ディレクトリ構成 / フォルダの意図
 - `/src/main.py` - アプリ本体Python
