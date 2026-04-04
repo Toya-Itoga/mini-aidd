@@ -12,6 +12,8 @@
 - `/src/templates/` - HTMLファイル
 - `/src/templates/static/css` - CSSファイル
 - `/src/templates/static/js` - JavaScriptファイル
+- `designs/wireframes/` - Claude Codeが生成したモック
+- `designs/screenshots/` - Playwrightが自動生成したスクショ
 
 ## コーディング規約 / スタイルガイド
 - コメントを書く
